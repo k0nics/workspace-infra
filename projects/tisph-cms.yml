@@ -1,0 +1,28 @@
+name: tisph-cms
+
+services:
+  app:
+    build:
+      context: ../repositories/TIS-Admin
+      dockerfile: Dockerfile.dev
+
+    image: tisph-cms:local
+    container_name: tisph-cms
+
+    restart: "no"
+
+    working_dir: /app
+
+    # volumes:
+      # Live sync
+      # - ../../repositories/TIS-Admin:/app
+
+    env_file:
+    - ../repositories/TIS-Admin/.env
+
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    external: true

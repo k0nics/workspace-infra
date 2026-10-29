@@ -1,0 +1,46 @@
+name: dev-infra
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: dev-nginx
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+         # TISPH CMS
+      # - ../../repositories/TIS-Admin:/app:ro
+    networks:
+      - dev-network
+
+  mysql:
+    image: mysql:8.4
+    container_name: dev-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - dev-network
+
+  adminer:
+    image: adminer:standalone
+    container_name: dev-adminer
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8081:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    name: dev-network
+
+volumes:
+  mysql-data:
