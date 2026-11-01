@@ -1,9 +1,27 @@
 local.file_match "laravel" {
   path_targets = [
     {
-      "__path__" = "/var/log/laravel/tis-admin/laravel*.log",
+      "__path__" = "/var/log/laravel/tisph-cms/laravel*.log",
       "job"      = "laravel",
-      "app"      = "tis-admin",
+      "app"      = "tisph-cms",
+      "env"      = "local",
+    },
+    {
+      "__path__" = "/var/log/laravel/tisph-website/laravel*.log",
+      "job"      = "laravel",
+      "app"      = "tisph-website",
+      "env"      = "local",
+    },
+    {
+      "__path__" = "/var/log/laravel/tfs-website/laravel*.log",
+      "job"      = "laravel",
+      "app"      = "tfs-website",
+      "env"      = "local",
+    },
+    {
+      "__path__" = "/var/log/laravel/tfs-cms/laravel*.log",
+      "job"      = "laravel",
+      "app"      = "tfs-cms",
       "env"      = "local",
     },
   ]
@@ -11,6 +29,18 @@ local.file_match "laravel" {
 
 loki.source.file "laravel" {
   targets = local.file_match.laravel.targets
+
+  forward_to = [
+    loki.process.laravel.receiver,
+  ]
+}
+
+loki.process "laravel" {
+  stage.multiline {
+    firstline     = "^\\[[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\\]"
+    max_lines     = 512
+    max_wait_time = "3s"
+  }
 
   forward_to = [
     loki.write.default.receiver,
