@@ -9,8 +9,7 @@ services:
       - "127.0.0.1:8080:80"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
-         # TISPH CMS
-      # - ../../repositories/TIS-Admin:/app:ro
+      - ../repositories/TIS-Admin:/app:ro
     networks:
       - dev-network
 
