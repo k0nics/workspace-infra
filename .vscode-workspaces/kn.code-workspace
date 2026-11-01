@@ -1,0 +1,21 @@
+{
+  "folders": [
+    {
+      "name": "Docker Infrastructure",
+      "path": "../docker-infra"
+    },
+    {
+      "name": "Projects",
+      "path": "../projects"
+
+    },
+  ],
+  "settings": {
+    "files.watcherExclude": {
+      "**/.git/objects/**": true,
+      "**/vendor/**": true,
+      "**/node_modules/**": true,
+      "**/.next/**": true
+    }
+  }
+}

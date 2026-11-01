@@ -1,0 +1,23 @@
+{
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/vendor/**": true,
+    "**/node_modules/**": true,
+    "**/.next/**": true,
+    "**/storage/logs/**": true,
+    "**/bootstrap/cache/**": true
+  },
+
+  "search.exclude": {
+    "**/vendor": true,
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/storage/logs": true,
+    "**/bootstrap/cache": true,
+    "**/repositories/**": true
+  },
+
+  "files.exclude": {
+    "**/.DS_Store": true
+  }
+}
