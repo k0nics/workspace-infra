@@ -13,6 +13,12 @@ services:
       - ../repositories/TIS-Website/public:/sites/tisph-website/public:ro
       - ../repositories/TFS-Website-Revamp-2022/public:/sites/tfs-website/public:ro
       - ../repositories/TFS-Website-Revamp-CMS/public:/sites/tfs-cms/public:ro
+      - ../repositories/SGV-Website/public:/sites/sgv-website/public:ro
+      - ../repositories/SGV-Website-CMS/public:/sites/sgv-cms/public:ro
+      - ../repositories/Ortigas-Land-Website/public:/sites/ortigas-land-website/public:ro
+      - ../repositories/Ortigas-Land-CMS/public:/sites/ortigas-land-cms/public:ro
+      - ../repositories/globe-digitest/public:/sites/globe-digitest/public:ro
+      - ../repositories/TFS-QMS-Cron/public:/sites/qms-cron/public:ro
     networks:
       - dev-network
 

@@ -57,6 +57,12 @@ services:
       - ../../repositories/TIS-Website/storage/logs:/var/log/laravel/tisph-website:ro
       - ../../repositories/TFS-Website-Revamp-2022/storage/logs:/var/log/laravel/tfs-website:ro
       - ../../repositories/TFS-Website-Revamp-CMS/storage/logs:/var/log/laravel/tfs-cms:ro
+      - ../../repositories/SGV-Website/storage/logs:/var/log/laravel/sgv-website:ro
+      - ../../repositories/SGV-Website-CMS/storage/logs:/var/log/laravel/sgv-cms:ro
+      - ../../repositories/Ortigas-Land-Website/storage/logs:/var/log/laravel/ortigas-land-website:ro
+      - ../../repositories/Ortigas-Land-CMS/storage/logs:/var/log/laravel/ortigas-land-cms:ro
+      - ../../repositories/globe-digitest/storage/logs:/var/log/laravel/globe-digitest:ro
+      - ../../repositories/TFS-QMS-Cron/storage/logs:/var/log/laravel/qms-cron:ro
 
       # Alloy positions and state
       - alloy-data:/var/lib/alloy

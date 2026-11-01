@@ -1,12 +1,68 @@
 apiVersion: 1
 
 providers:
-  - name: Local development
+  - name: TIS logs
     orgId: 1
-    folder: Local Development
+    folder: TIS
+    folderUid: tis-logs
     type: file
     disableDeletion: true
     updateIntervalSeconds: 10
-    allowUiUpdates: false
+    allowUiUpdates: true
     options:
-      path: /etc/grafana/provisioning/dashboards/json
+      path: /etc/grafana/provisioning/dashboards/tis
+
+  - name: TFS logs
+    orgId: 1
+    folder: TFS
+    folderUid: tfs-logs
+    type: file
+    disableDeletion: true
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/tfs
+
+  - name: SGV logs
+    orgId: 1
+    folder: SGV
+    folderUid: sgv-logs
+    type: file
+    disableDeletion: true
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/sgv
+
+  - name: Ortigas Land logs
+    orgId: 1
+    folder: Ortigas Land
+    folderUid: ortigas-land-logs
+    type: file
+    disableDeletion: true
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/ortigas-land
+
+  - name: Globe logs
+    orgId: 1
+    folder: Globe
+    folderUid: globe-logs
+    type: file
+    disableDeletion: true
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/globe
+
+  - name: QMS logs
+    orgId: 1
+    folder: QMS
+    folderUid: cg2yxc04mnhtsb
+    type: file
+    disableDeletion: true
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/qms

@@ -24,6 +24,42 @@ local.file_match "laravel" {
       "app"      = "tfs-cms",
       "env"      = "local",
     },
+    {
+      "__path__" = "/var/log/laravel/sgv-website/laravel*.log",
+      "job"      = "laravel",
+      "app"      = "sgv-website",
+      "env"      = "local",
+    },
+    {
+      "__path__" = "/var/log/laravel/sgv-cms/laravel*.log",
+      "job"      = "laravel",
+      "app"      = "sgv-cms",
+      "env"      = "local",
+    },
+    {
+      "__path__" = "/var/log/laravel/ortigas-land-website/laravel*.log",
+      "job"      = "laravel",
+      "app"      = "ortigas-land-website",
+      "env"      = "local",
+    },
+    {
+      "__path__" = "/var/log/laravel/ortigas-land-cms/laravel*.log",
+      "job"      = "laravel",
+      "app"      = "ortigas-land-cms",
+      "env"      = "local",
+    },
+    {
+      "__path__" = "/var/log/laravel/globe-digitest/laravel*.log",
+      "job"      = "laravel",
+      "app"      = "globe-digitest",
+      "env"      = "local",
+    },
+    {
+      "__path__" = "/var/log/laravel/qms-cron/laravel*.log",
+      "job"      = "laravel",
+      "app"      = "qms-cron",
+      "env"      = "local",
+    },
   ]
 }
 
