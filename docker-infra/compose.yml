@@ -9,7 +9,10 @@ services:
       - "127.0.0.1:8080:80"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ../repositories/TIS-Admin:/app:ro
+      - ../repositories/TIS-Admin/public:/sites/tisph-cms/public:ro
+      - ../repositories/TIS-Website/public:/sites/tisph-website/public:ro
+      - ../repositories/TFS-Website-Revamp-2022/public:/sites/tfs-website/public:ro
+      - ../repositories/TFS-Website-Revamp-CMS/public:/sites/tfs-cms/public:ro
     networks:
       - dev-network
 

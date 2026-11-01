@@ -1,0 +1,40 @@
+name: tisph-website
+
+services:
+  app:
+    build:
+      context: ../docker-infra/images/php-dev
+      dockerfile: Dockerfile
+
+    image: laravel-php83-dev:local
+    container_name: tisph-website
+
+    restart: "no"
+
+    working_dir: /app
+
+    command:
+      - sh
+      - /usr/local/bin/start-laravel-php-fpm
+
+    volumes:
+      - ../repositories/TIS-Website:/app
+      - ../docker-infra/scripts/start-laravel-php-fpm.sh:/usr/local/bin/start-laravel-php-fpm:ro
+
+    env_file:
+      - ../repositories/TIS-Website/.env
+
+    environment:
+      APP_URL: http://tisph-website-ben-local.localhost:8080
+      DB_HOST: mysql
+      DB_PORT: 3306
+
+    expose:
+      - "9000"
+
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    external: true

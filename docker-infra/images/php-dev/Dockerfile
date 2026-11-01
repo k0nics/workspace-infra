@@ -1,4 +1,6 @@
-FROM public.ecr.aws/docker/library/php:8.3.36-fpm-bookworm
+ARG PHP_VERSION=8.3.36
+
+FROM public.ecr.aws/docker/library/php:${PHP_VERSION}-fpm-bookworm
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -10,6 +12,7 @@ RUN apt-get update \
         libjpeg62-turbo-dev \
         libonig-dev \
         libpng-dev \
+        libssl-dev \
         libxml2-dev \
         libzip-dev \
         unzip \
