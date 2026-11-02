@@ -60,6 +60,24 @@ local.file_match "laravel" {
       "app"      = "qms-cron",
       "env"      = "local",
     },
+    {
+      "__path__" = "/var/log/laravel/qms-cms/laravel*.log",
+      "job"      = "laravel",
+      "app"      = "qms-cms",
+      "env"      = "local",
+    },
+    {
+      "__path__" = "/var/log/laravel/qms-appointment/laravel*.log",
+      "job"      = "laravel",
+      "app"      = "qms-appointment",
+      "env"      = "local",
+    },
+    {
+      "__path__" = "/var/log/laravel/qms-counter/laravel*.log",
+      "job"      = "laravel",
+      "app"      = "qms-counter",
+      "env"      = "local",
+    },
   ]
 }
 

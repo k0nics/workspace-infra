@@ -63,6 +63,9 @@ services:
       - ../../repositories/Ortigas-Land-CMS/storage/logs:/var/log/laravel/ortigas-land-cms:ro
       - ../../repositories/globe-digitest/storage/logs:/var/log/laravel/globe-digitest:ro
       - ../../repositories/TFS-QMS-Cron/storage/logs:/var/log/laravel/qms-cron:ro
+      - ../../repositories/Toyota-Financial-Services-Queue-Management-System-CMS/storage/logs:/var/log/laravel/qms-cms:ro
+      - ../../repositories/TFS-Appointment-Scheduler/storage/logs:/var/log/laravel/qms-appointment:ro
+      - ../../repositories/TFS-QMS-Counter-Dashboard/storage/logs:/var/log/laravel/qms-counter:ro
 
       # Alloy positions and state
       - alloy-data:/var/lib/alloy
