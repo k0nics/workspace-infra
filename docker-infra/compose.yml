@@ -19,6 +19,9 @@ services:
       - ../repositories/Ortigas-Land-CMS/public:/sites/ortigas-land-cms/public:ro
       - ../repositories/globe-digitest/public:/sites/globe-digitest/public:ro
       - ../repositories/TFS-QMS-Cron/public:/sites/qms-cron/public:ro
+      - ../repositories/Toyota-Financial-Services-Queue-Management-System-CMS/public:/sites/qms-cms/public:ro
+      - ../repositories/TFS-Appointment-Scheduler/public:/sites/qms-appointment/public:ro
+      - ../repositories/TFS-QMS-Counter-Dashboard/public:/sites/qms-counter/public:ro
     networks:
       - dev-network
 

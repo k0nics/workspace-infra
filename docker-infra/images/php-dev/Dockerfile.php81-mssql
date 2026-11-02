@@ -1,0 +1,20 @@
+FROM laravel-php81-dev:local
+
+RUN curl -sSL \
+        -o /tmp/packages-microsoft-prod.deb \
+        https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb \
+    && dpkg -i /tmp/packages-microsoft-prod.deb \
+    && rm -f /tmp/packages-microsoft-prod.deb \
+    && apt-get update \
+    && ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
+        libgssapi-krb5-2 \
+        msodbcsql18 \
+        unixodbc-dev \
+    && pecl install \
+        sqlsrv-5.12.0 \
+        pdo_sqlsrv-5.12.0 \
+    && docker-php-ext-enable \
+        sqlsrv \
+        pdo_sqlsrv \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/pear
