@@ -6,16 +6,142 @@ and configuration source changes do not require an image rebuild or container re
 
 Run all commands from the workspace root.
 
+## Host platform support: macOS and Windows
+
+This development environment works on both macOS and Windows because Docker runs
+the same Linux containers on either host. Compose uses relative bind-mount paths,
+so no developer-specific absolute path is stored in the project files.
+
+Supported host setups:
+
+- macOS with Docker Desktop or Colima.
+- Windows with Docker Desktop, the WSL 2 backend, and Linux containers enabled.
+
+Every developer must preserve this directory layout and the exact repository
+directory names:
+
+```text
+Workspace/
+├── docker-infra/
+├── projects/
+└── repositories/
+    ├── TIS-Admin/
+    ├── TFS-QMS-Cron/
+    └── ...
+```
+
+The `repositories/` directory is intentionally not tracked by this infrastructure
+repository. Each application must be cloned separately into it. Each developer
+also needs the appropriate application `.env` files; secrets must be distributed
+through an approved secure channel rather than committed to Git.
+
+Unless a section is explicitly marked otherwise, the one-line `docker compose`
+commands in this guide work unchanged in macOS Terminal, Windows PowerShell, and
+a WSL terminal.
+
+### macOS setup
+
+Install and start Docker Desktop, or start the existing Colima runtime:
+
+```sh
+colima start
+docker compose version
+docker info
+```
+
+Docker Desktop users do not need Colima; start Docker Desktop and run only the
+two Docker verification commands. See the official
+[Docker Desktop for Mac installation guide](https://docs.docker.com/desktop/setup/install/mac-install/).
+
+Create the shared infrastructure environment file on first setup:
+
+```sh
+cp docker-infra/.env.example docker-infra/.env
+```
+
+### Windows setup
+
+Install Docker Desktop, enable its WSL 2 engine and WSL integration, and make sure
+Docker is using Linux containers. See Docker's official
+[WSL 2 backend guide](https://docs.docker.com/desktop/features/wsl/).
+
+For the best bind-mount and hot-reload performance, clone `Workspace` inside the
+WSL Linux filesystem, such as `~/Workspace`, and run the commands from a WSL
+terminal. Docker recommends the Linux filesystem instead of `/mnt/c/...` for
+bind-mounted source code. PowerShell with a normal Windows checkout also works,
+but filesystem access and file watching may be slower.
+
+From PowerShell, create the infrastructure environment file with:
+
+```powershell
+Copy-Item docker-infra/.env.example docker-infra/.env
+docker compose version
+docker info
+```
+
+The root `.gitattributes` keeps container shell scripts and Docker configuration
+on Unix `LF` line endings. This prevents errors such as `/bin/sh^M` after a
+Windows checkout.
+
+### First-time image builds on either platform
+
+Images tagged `:local` exist only inside each developer's Docker installation;
+they do not need an artifact registry. Build only the versions needed by that
+developer's applications. For the QMS Laravel applications, build PHP 8.1 first
+and then its derived MSSQL image:
+
+```sh
+docker build -f docker-infra/images/php-dev/Dockerfile.php81 -t laravel-php81-dev:local docker-infra/images/php-dev
+docker build -f docker-infra/images/php-dev/Dockerfile.php81-mssql -t laravel-php81-mssql-dev:local docker-infra/images/php-dev
+```
+
+Other available local images can be built independently:
+
+```sh
+docker build -f docker-infra/images/php-dev/Dockerfile -t laravel-php83-dev:local docker-infra/images/php-dev
+docker build -f docker-infra/images/php-dev/Dockerfile.php74 -t laravel-php74-dev:local docker-infra/images/php-dev
+```
+
+If Buildx is missing, use the classic builder for that terminal session.
+
+macOS Terminal or WSL:
+
+```sh
+export DOCKER_BUILDKIT=0
+# Run the required docker build commands.
+unset DOCKER_BUILDKIT
+```
+
+Windows PowerShell:
+
+```powershell
+$env:DOCKER_BUILDKIT = "0"
+# Run the required docker build commands.
+Remove-Item Env:DOCKER_BUILDKIT
+```
+
+Start the shared services after the required images have been built:
+
+```sh
+docker compose -f docker-infra/compose.yml up -d
+docker compose -f docker-infra/monitoring/compose.yml up -d
+```
+
+The `*.localhost` URLs normally resolve to `127.0.0.1` on both platforms, so no
+hosts-file entries should be necessary. Applications using online MSSQL still
+require the corporate VPN/network route to be available inside Docker Desktop or
+Colima; host access to the VPN does not always guarantee VM access.
+
 ## TIS-Admin
 
 Start the shared services and the application:
 
 ```sh
 docker compose -f docker-infra/compose.yml up -d mysql nginx
-DOCKER_BUILDKIT=0 docker compose -f projects/tisph-cms.yml up -d --build app
+docker compose -f projects/tisph-cms.yml up -d --build app
 ```
 
-Open <http://tisph-cms.localhost:8080/admin/auth>.
+Open <http://tisph-cms-ben-local.localhost:8080/admin/auth>.
 
 After the first successful image build, ordinary starts do not need `--build`:
 
@@ -66,7 +192,7 @@ Docker network. Start it independently:
 docker compose -f projects/tisph-website.yml up -d app
 ```
 
-Open <http://tisph-website.localhost:8080>. Both TIS applications use Nginx port
+Open <http://tisph-website-ben-local.localhost:8080>. Both TIS applications use Nginx port
 `8080`; Nginx selects the application by hostname. Their PHP-FPM containers both
 use port `9000` internally without conflict.
 
@@ -90,7 +216,7 @@ PHP 8.1 development image required by its locked Composer dependencies.
 
 ```sh
 docker compose -f projects/tfs-website.yml up -d app
-DOCKER_BUILDKIT=0 docker compose -f projects/tfs-cms.yml up -d --build app
+docker compose -f projects/tfs-cms.yml up -d --build app
 ```
 
 Open:
@@ -164,13 +290,13 @@ Rebuild `laravel-php83-dev:local` only when the PHP version, extensions, system
 packages, Composer binary, or files under `docker-infra/images/php-dev` change:
 
 ```sh
-DOCKER_BUILDKIT=0 docker compose -f projects/tisph-cms.yml build app
+docker compose -f projects/tisph-cms.yml build app
 docker compose -f projects/tisph-cms.yml up -d app
 ```
 
-`DOCKER_BUILDKIT=0` is currently needed on this workstation because Docker is
-configured with a missing `buildx` CLI plugin. It can be dropped after `buildx` is
-installed or the stale CLI-plugin configuration is fixed.
+`DOCKER_BUILDKIT=0` is currently needed only on a workstation whose Docker CLI is
+configured with a missing `buildx` plugin. Developers with a working Buildx
+installation should omit it. The platform-specific syntax is documented above.
 
 Do not rebuild for changes to controllers, models, routes, Blade or Vue files, CSS,
 or other bind-mounted application source. Run `composer install` in the existing
@@ -184,7 +310,9 @@ previously generated cache after a configuration or route change, run
    Create another version-specific development image for a different PHP version.
 2. Add a project Compose file under `projects/` with one PHP-FPM service, the
    repository mounted at `/app`, its existing `.env` supplied through `env_file`,
-   and the external `dev-network`. Override `DB_HOST=mysql` only in Compose.
+   and the external `dev-network`. Override `DB_HOST=mysql` only when the project
+   is intentionally using the shared local MySQL service; preserve external
+   database settings for applications such as QMS.
    Mount `docker-infra/scripts/start-laravel-php-fpm.sh` to reuse the same safe
    startup behavior.
 3. Add the repository as a read-only mount on `docker-infra/compose.yml`'s Nginx
