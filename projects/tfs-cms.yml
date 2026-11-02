@@ -4,9 +4,7 @@ services:
   app:
     build:
       context: ../docker-infra/images/php-dev
-      dockerfile: Dockerfile
-      args:
-        PHP_VERSION: 8.1.33
+      dockerfile: Dockerfile.php81
 
     image: laravel-php81-dev:local
     container_name: tfs-cms
@@ -29,6 +27,8 @@ services:
       APP_URL: http://tfs-cms-ben-local.localhost:8080
       DB_HOST: mysql
       DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
 
     expose:
       - "9000"

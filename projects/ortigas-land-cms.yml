@@ -1,0 +1,41 @@
+name: ortigas-land-cms
+
+services:
+  app:
+    build:
+      context: ../docker-infra/images/php-dev
+      dockerfile: Dockerfile.php74
+
+    image: laravel-php74-dev:local
+    container_name: ortigas-land-cms
+
+    restart: "no"
+    working_dir: /app
+
+    command:
+      - sh
+      - /usr/local/bin/start-laravel-php-fpm
+
+    volumes:
+      - ../repositories/Ortigas-Land-CMS:/app
+      - ../docker-infra/scripts/start-laravel-php-fpm.sh:/usr/local/bin/start-laravel-php-fpm:ro
+
+    env_file:
+      - ../repositories/Ortigas-Land-CMS/.env
+
+    environment:
+      APP_URL: http://ortigas-land-cms-ben-local.localhost:8080
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: root
+      DB_PASSWORD: root
+
+    expose:
+      - "9000"
+
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    external: true

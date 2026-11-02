@@ -1,0 +1,43 @@
+name: qms-kiosk
+
+services:
+  app:
+    image: public.ecr.aws/docker/library/node:20.18.0-bookworm-slim
+    container_name: qms-kiosk
+
+    restart: "no"
+    working_dir: /app
+
+    command:
+      - npm
+      - run
+      - dev
+      - --
+      - --hostname
+      - 0.0.0.0
+      - --port
+      - "3000"
+
+    volumes:
+      - ../repositories/TFS-QMS-Kiosk:/app
+      - qms-kiosk-node-modules:/app/node_modules
+
+    env_file:
+      - ../repositories/TFS-QMS-Kiosk/.env
+
+    environment:
+      NODE_ENV: development
+      TZ: Asia/Manila
+
+    expose:
+      - "3000"
+
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    external: true
+
+volumes:
+  qms-kiosk-node-modules:

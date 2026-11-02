@@ -1,0 +1,37 @@
+name: qms-counter
+
+services:
+  app:
+    build:
+      context: ../docker-infra/images/php-dev
+      dockerfile: Dockerfile.php81-mssql
+
+    image: laravel-php81-mssql-dev:local
+    container_name: qms-counter
+
+    restart: "no"
+    working_dir: /app
+
+    command:
+      - sh
+      - /usr/local/bin/start-laravel-php-fpm
+
+    volumes:
+      - ../repositories/TFS-QMS-Counter-Dashboard:/app
+      - ../docker-infra/scripts/start-laravel-php-fpm.sh:/usr/local/bin/start-laravel-php-fpm:ro
+
+    env_file:
+      - ../repositories/TFS-QMS-Counter-Dashboard/.env
+
+    environment:
+      APP_URL: http://qms-counter-ben-local.localhost:8080
+
+    expose:
+      - "9000"
+
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    external: true
