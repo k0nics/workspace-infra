@@ -33,7 +33,6 @@
       "type": "logs"
     }
   ],
-  "refresh": "5s",
   "schemaVersion": 41,
   "tags": ["laravel", "qms", "qms-cron"],
   "templating": { "list": [] },
